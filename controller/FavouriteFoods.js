@@ -1,8 +1,8 @@
 var rest = require('../API/Restclient');
-
-exports.displayFavouriteFood = function getFavouriteFood(session, username){
+var password = require('./LuisDialog');
+exports.displayFavouriteFood = function getFavouriteFood(session, username, password){
     var url = 'https://foodbot32.azurewebsites.net/tables/foodbot';
-    rest.getFavouriteFood(url, session, username, handleFavouriteFoodResponse)
+    rest.getFavouriteFood(url, session, username, password, handleFavouriteFoodResponse)
 };
 
 exports.sendFavouriteFood = function postFavouriteFood(session, username, favouriteFood){
@@ -43,16 +43,18 @@ function handleDeletedFoodResponse(body,session,username, favouriteFood){
 }
 
 
-function handleFavouriteFoodResponse(message, session, username) {
+function handleFavouriteFoodResponse(message, session, username,password) {
     var favouriteFoodResponse = JSON.parse(message);
     var allFoods = [];
     for (var index in favouriteFoodResponse) {
         var usernameReceived = favouriteFoodResponse[index].username;
+        var passwordReceived = favouriteFoodResponse[index].password;
+        
         console.log(favouriteFoodResponse[index]);
         var favouriteFood = favouriteFoodResponse[index].favouriteFood;
-
+        session.send("%s, password", password);  
         //Convert to lower case whilst doing comparison to ensure the user can type whatever they like
-        if (username.toLowerCase() === usernameReceived.toLowerCase()) {
+        if (username.toLowerCase() === usernameReceived.toLowerCase() && password === passwordReceived) {
             //Add a comma after all favourite foods unless last one
             if(favouriteFoodResponse.length - 1) {
                 allFoods.push(favouriteFood);
