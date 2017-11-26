@@ -2,6 +2,8 @@ var builder = require('botbuilder');
 var food = require("./FavouriteFoods");
 var restaurant = require('./RestaurantCard');
 var nutrition = require('./NutritionCard');
+var qna = require('./QnAMaker');
+
 // Some sections have been omitted
 var isAttachment = false;
 
@@ -114,6 +116,8 @@ exports.startDialog = function (bot) {
 
  // Add dialog to return list of shirts available
 bot.dialog('WelcomeIntent', function (session) {
+ 
+    
     var msg = new builder.Message(session);
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
@@ -124,22 +128,78 @@ bot.dialog('WelcomeIntent', function (session) {
             .buttons([
                 builder.CardAction.imBack(session, "I would like to modify or see my bank details", "Personal Details"),
                 builder.CardAction.imBack(session, "I would like information about the bank", "Bank Information"),                
-                builder.CardAction.imBack(session, "I would like information information on Currency and Stock Exchange", "Currency and Stock Exchange"),
+                builder.CardAction.imBack(session, "I would like information  on Currency and Stock Exchange", "Currency and Stock Exchange"),
                 
             ]),
-            builder.Prompts.choice(session, "Welcome to costoso banking bot!\n\n I am here to help you with any bank needs. I hope\n\n  that I can help you to achieve what you desire.", "Bank Information|Personal Details|Currency and Stock Exchange", { listStyle: builder.ListStyle.button })
     ]);
     session.send(msg).endDialog();
 }).triggerAction({ matches: 'WelcomeIntent' });
 
-bot.dialog('BankInformation', function (session, args) {
+    bot.dialog('BankInformation', function (session) {
+        
+           
+           var msg = new builder.Message(session);
+           msg.attachmentLayout(builder.AttachmentLayout.carousel)
+           msg.attachments([
+               new builder.HeroCard(session)
+                   .title("Information about your friendly neighbourhood Contoso Bank")
+                   .text("What would you like to know about your Contoso Bank? And what can I help you with?")
+                   .images([builder.CardImage.create(session, 'http://3mkm08kox71vtynw1b1wbtpab.wpengine.netdna-cdn.com/wp-content/uploads/2017/02/GettyImages-117455512.jpg')])
+                   .buttons([
+                       builder.CardAction.imBack(session, "What are the office hours.", "Office Hours"),
+                       builder.CardAction.imBack(session, "What are the contact details", "Contact Us"),                
+                       builder.CardAction.imBack(session, "I have a question", "Questions about Conotoso Bank"),
+                       builder.CardAction.imBack(session, "Home", "Back"),
+                       
+                   ]),
+           ]);
+           session.send(msg).endDialog();
+       }).triggerAction({ matches: 'BankInformation' });
     
-    session.send("BankInformation intent found");
+       bot.dialog('OfficeHours', function (session) {
+        
+           
+           var msg = new builder.Message(session);
+           msg.attachmentLayout(builder.AttachmentLayout.carousel)
+           msg.attachments([
+               new builder.HeroCard(session)
+               .title("Office Hours")
+               .text("*We are closed on all public hoidays. Sorry for any inconvenience")
+                   .images([builder.CardImage.create(session, 'http://www.drmac.co.nz/wp-content/uploads/2012/06/Office-Hours-2017.png')])
+                   .buttons([
+                       builder.CardAction.imBack(session, "Bank Information", "Back/ Bank Information"),
 
-}).triggerAction({
-    matches: 'BankInformation'
-});
+                   ]),
+           ]);
+           session.send(msg).endDialog();
+       }).triggerAction({ matches: 'OfficeHours' });
+       
+       bot.dialog('ContactUs', function (session) {
+        
+           
+           var msg = new builder.Message(session);
+           msg.attachmentLayout(builder.AttachmentLayout.carousel)
+           msg.attachments([
+               new builder.HeroCard(session)
+               .title("Auckland Contoso Bank Branch")
+               .text("Address: 286 Mount Wellington Hwy, Mount Wellington, Auckland 1060\n\n Phone Number: 09-5782331\n\n Email Address: auckland@contoso.com")
+                   .images([builder.CardImage.create(session, 'https://www.idfcbank.com/content/dam/idfc/image/about/hero-images/AboutUs.jpg')])
+                ,
+                   new builder.HeroCard(session)
+                   .title("Hamilton Contoso Bank Branch")
+                   .text("Address: 33 Lake Rd, Frankton, Waikato, Hamilton 3204 \n\n Phone Number: 07-4343543\n\n Email Address: hamilton@contoso.com")
     
+                       .images([builder.CardImage.create(session, 'https://s.wsj.net/public/resources/images/BN-VC513_BOFABR_M_20170913165648.jpg')])
+                ,new builder.HeroCard(session)
+                .title("Christchurch Contoso Bank Branch")
+                .text("Address: Hornby Mall 418 Main South Road Hornby Christchurch 8042 \n\n Phone Number: 03-9482123\n\n Email Address: christchurch@contoso.com")
+                     .images([builder.CardImage.create(session, 'https://www.littleonline.com/uploads/project_media/bank-of-america-flagship/1.jpg')])
+        
+           ]);
+           session.send(msg).endDialog();
+           builder.Prompts.choice(session, "The locations above are all of our branches accross the New Zealand.\n\n But get excited because we will soon be opening near you!!", "Bank Information", { listStyle: builder.ListStyle.button });
+       }).triggerAction({ matches: 'ContactUs' });
+
 
     bot.dialog('LookForFavourite', [
         function (session, args, next) {
@@ -171,6 +231,26 @@ bot.dialog('BankInformation', function (session, args) {
         
     ]).triggerAction({
         matches: 'LookForFavourite'
+    });
+
+    bot.dialog('QnA', [
+
+        function (session, args, next) {
+            session.dialogData.args = args || {};
+            builder.Prompts.text(session, "What is your question?\n\n (Type 'Bank information' to return back or\n\n 'Question' to ask another question \n\nafter the question has been responded too)");
+            
+            
+            
+        },
+        function (session, results, next) {
+            qna.talkToQnA(session, results.response);
+            next();
+            
+        },
+
+        
+    ]).triggerAction({
+        matches: 'QnA'
     });
     
 

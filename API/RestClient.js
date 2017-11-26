@@ -45,6 +45,7 @@ exports.getYelpData = function getData(url,bearer,session, callback){
             }
         });
     };
+    
 
     exports.getNutritionData = function getData(url, session, foodName, callback){
         
@@ -66,7 +67,6 @@ exports.getYelpData = function getData(url,bearer,session, callback){
                     'Content-Type':'application/json'
                 }
             };
-        
             request(options,function (err, res, body){
                 if( !err && res.statusCode === 200){
                     console.log(body);
@@ -78,6 +78,28 @@ exports.getYelpData = function getData(url,bearer,session, callback){
             })
         
         };
+        exports.postQnAResults = function getData(url, session, question, callback){
+            var options = {
+                url: url,
+                method: 'POST',
+                headers: {
+                    'Ocp-Apim-Subscription-Key': '63442b0b4c5d46ab8a8ead37dddf460e',
+                    'Content-Type':'application/json'
+                },
+                json: {
+                    "question" : question
+                }
+              };
+          
+              request(options, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    callback(body, session, question);
+                }
+                else{
+                    console.log(error);
+                }
+              });
+          };
 /*exports.deleteFavouriteFood = function deleteData(url,session, username ,favouriteFood, id, callback){
     var options = {
         url: url + "\\" + id,

@@ -19,9 +19,9 @@ server.post('/api/messages', connector.listen());
 
 // Receive messages from the user
 var bot = new builder.UniversalBot(connector, function (session) {
+    session.send('...');
     
     session.send('Sorry, I did not understand \'%s\'. Type \'help\' if you need assistance.', session.message.text);
 });
-    
 // This line will call the function in your LuisDialog.js file
 luis.startDialog(bot);

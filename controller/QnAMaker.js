@@ -1,7 +1,7 @@
 var rest = require('../API/Restclient');
 
 exports.talkToQnA = function postQnAResults(session, question){
-    var url = 'https://westus.api.cognitive.microsoft.com/qnamaker/v2.0/knowledgebases/c18f0217-c71b-4cee-b3da-2abe46423d9b/generateAnswer';
+    var url = 'https://westus.api.cognitive.microsoft.com/qnamaker/v2.0/knowledgebases/aa129982-6b2e-47dd-80f8-32f6eac87325/generateAnswer';
     rest.postQnAResults(url, session, question, handleQnA)
 };
 

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/raghavgarg32/Food_Bot#readme",
   "dependencies": {
+    "@google/maps": "^0.4.5",
     "botbuilder": "^3.12.0",
     "restify": "^6.3.4"
   }
