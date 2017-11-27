@@ -10,6 +10,55 @@ exports.getFavouriteFood = function getData(url, session, username, password, ca
     });
 };
 
+exports.showAddress = function getData(url, session, username, password, callback){
+    request.get(url, {'headers':{'ZUMO-API-VERSION': '2.0.0'}}, function(err,res,body){
+        if(err){
+            console.log(err);
+        }else {
+            callback(body, session, username, password);
+        }
+    });
+};
+
+exports.showEmail = function getData(url, session, username, password, callback){
+    request.get(url, {'headers':{'ZUMO-API-VERSION': '2.0.0'}}, function(err,res,body){
+        if(err){
+            console.log(err);
+        }else {
+            callback(body, session, username, password);
+        }
+    });
+};
+
+exports.showPhone = function getData(url, session, username, password, callback){
+    request.get(url, {'headers':{'ZUMO-API-VERSION': '2.0.0'}}, function(err,res,body){
+        if(err){
+            console.log(err);
+        }else {
+            callback(body, session, username, password);
+        }
+    });
+};
+
+exports.showBalance = function getData(url, session, username, password, callback){
+    request.get(url, {'headers':{'ZUMO-API-VERSION': '2.0.0'}}, function(err,res,body){
+        if(err){
+            console.log(err);
+        }else {
+            callback(body, session, username, password);
+        }
+    });
+};
+exports.showAllDetails = function getData(url, session, username, password, callback){
+    request.get(url, {'headers':{'ZUMO-API-VERSION': '2.0.0'}}, function(err,res,body){
+        if(err){
+            console.log(err);
+        }else {
+            callback(body, session, username, password);
+        }
+    });
+};
+
 
 exports.postFavouriteFood = function SendData(url, username, favouriteFood){
     var options = {
@@ -22,6 +71,31 @@ exports.postFavouriteFood = function SendData(url, username, favouriteFood){
         json: {
             "username" : username,
             "favouriteFood" : favouriteFood
+        }
+      };
+      
+      request(options, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            console.log(body);
+        }
+        else{
+            console.log(error);
+        }
+      });
+};
+
+exports.postAddress = function SendData(url, username, password, Address){
+    var options = {
+        url: url,
+        method: 'POST',
+        headers: {
+            'ZUMO-API-VERSION': '2.0.0',
+            'Content-Type':'application/json'
+        },
+        json: {
+            "username" : username,
+            "password" : password,
+            "Address" : Address
         }
       };
       
