@@ -30,13 +30,11 @@ exports.displayAllDetails = function showAllDetails(session, username, password)
 
 
 
-exports.sendAddress = function postAddress(session, username, password, Address){
+
+exports.sendEmail = function postEmail(session, username,password, Email){
     var url = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
-    rest.postAddress(url, username, password, Address);
+    rest.postEmail(url, username, password, Email);
 };
-
-
-
 
 exports.deleteAddress = function deleteAddress(session,username,password,Address){
     var url  = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';

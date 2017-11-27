@@ -52,7 +52,9 @@ exports.showAllDetails = function getData(url, session, username, password, call
 };
 
 
-exports.postFavouriteFood = function SendData(url, username, favouriteFood){
+
+
+exports.postEmail = function getData(url, username,password,Email){
     var options = {
         url: url,
         method: 'POST',
@@ -62,7 +64,8 @@ exports.postFavouriteFood = function SendData(url, username, favouriteFood){
         },
         json: {
             "username" : username,
-            "favouriteFood" : favouriteFood
+            "password" : password,
+            "Email" : Email
         }
       };
       
@@ -76,30 +79,6 @@ exports.postFavouriteFood = function SendData(url, username, favouriteFood){
       });
 };
 
-exports.postAddress = function SendData(url, username, password, Address){
-    var options = {
-        url: url,
-        method: 'POST',
-        headers: {
-            'ZUMO-API-VERSION': '2.0.0',
-            'Content-Type':'application/json'
-        },
-        json: {
-            "username" : username,
-            "password" : password,
-            "Address" : Address
-        }
-      };
-      
-      request(options, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            console.log(body);
-        }
-        else{
-            console.log(error);
-        }
-      });
-};
 
 exports.getYelpData = function getData(url,bearer,session, callback){
     
