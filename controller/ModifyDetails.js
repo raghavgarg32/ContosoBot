@@ -30,11 +30,21 @@ exports.displayAllDetails = function showAllDetails(session, username, password)
 
 
 
+exports.sendAddress = function postAddress(session, username, password, Address){
+    var url = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
+    rest.postAddress(url, username, password, Address);
+};
 
 exports.sendEmail = function postEmail(session, username,password, Email){
     var url = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
     rest.postEmail(url, username, password, Email);
 };
+
+exports.sendPhone = function postPhone(session, username,password, Phone){
+    var url = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
+    rest.postPhone(url, username, password, Phone);
+};
+
 
 exports.deleteAddress = function deleteAddress(session,username,password,Address){
     var url  = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
@@ -60,6 +70,67 @@ exports.deleteAddress = function deleteAddress(session,username,password,Address
 };
 
 function handleDeletedAddressResponse(body,session,username,password, Address){
+
+        console.log('Done');
+
+
+}
+
+exports.deleteEmail = function deleteEmail(session,username,password,Email){
+    var url  = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
+
+
+    rest.showEmail(url,session, username, password,function(message,session,username,password){
+     var allEmail = JSON.parse(message);
+
+        for(var i in allEmail) {
+
+            if (allEmail[i].Email === Email && allEmail[i].username === username && allEmail[i].password === password) {
+
+
+                rest.deleteEmail(url,session,username,password,Address,allEmail[i].id ,handleDeletedEmailResponse)
+
+            }
+        }
+
+
+    });
+
+
+};
+
+function handleDeletedEmailResponse(body,session,username,password, Email){
+
+        console.log('Done');
+
+
+}
+
+
+exports.deletePhone = function deletePhone(session,username,password,Phone){
+    var url  = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
+
+
+    rest.showPhone(url,session, username, password,function(message,session,username,password){
+     var allPhone = JSON.parse(message);
+
+        for(var i in allPhone) {
+
+            if (allPhone[i].Phone === Phone && allPhone[i].username === username && allPhone[i].password === password) {
+
+
+                rest.deletePhone(url,session,username,password,Phone,allPhone[i].id ,handleDeletedPhoneResponse)
+
+            }
+        }
+
+
+    });
+
+
+};
+
+function handleDeletedPhoneResponse(body,session,username,password, Phone){
 
         console.log('Done');
 

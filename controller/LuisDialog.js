@@ -374,72 +374,55 @@ exports.startDialog = function (bot) {
     ]).triggerAction({
         matches: 'DeleteAddress'
     });  
-    bot.dialog('DeleteEmail', [
-        function (session, args, next) {
-            session.dialogData.args = args || {};
-            if (!session.conversationData["username"]) {
-                builder.Prompts.text(session, "Enter a username to setup your account.");
-            } else {
-                next(); // Skip if we already have this info.
-            }
-        },
-        function (session, results,next) {
-            
-            //Add this code in otherwise your username will not work.
-            if (results.response) {
-                session.conversationData["username"] = results.response;
-            }
-
-            session.send("You want to delete one of your favourite foods.");
-
-            // Pulls out the food entity from the session if it exists
-            var foodEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'food');
-
-            // Checks if the for entity was found
-            if (foodEntity) {
-                session.send('Deleting \'%s\'...', foodEntity.entity);
-                food.deleteFavouriteFood(session,session.conversationData['username'],foodEntity.entity); //<--- CALLL WE WANT
-            } else {
-                session.send("No food identified! Please try again");
-            }
-        
-
-    }]).triggerAction({
-        matches: 'DeleteEmail'
-    });
     bot.dialog('DeletePhone', [
         function (session, args, next) {
-            session.dialogData.args = args || {};
-            if (!session.conversationData["username"]) {
-                builder.Prompts.text(session, "Enter a username to setup your account.");
-            } else {
+            session.dialogData.args = args || {};        
+                builder.Prompts.text(session, "Please enter the username of your account:");
+                
                 next(); // Skip if we already have this info.
-            }
-        },
-        function (session, results,next) {
-            
-            //Add this code in otherwise your username will not work.
-            if (results.response) {
-                session.conversationData["username"] = results.response;
-            }
-
-            session.send("You want to delete one of your favourite foods.");
-
-            // Pulls out the food entity from the session if it exists
-            var foodEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'food');
-
-            // Checks if the for entity was found
-            if (foodEntity) {
-                session.send('Deleting \'%s\'...', foodEntity.entity);
-                food.deleteFavouriteFood(session,session.conversationData['username'],foodEntity.entity); //<--- CALLL WE WANT
-            } else {
-                session.send("No food identified! Please try again");
-            }
         
+        },
+        function (session, results, next) {
+                    session.conversationData["username"] = results.response;
+            
+                
+                next()
+                // <---- THIS LINE HERE IS WHAT WE NEED 
+            
+        },
+        function (session, result, next) {
+            builder.Prompts.text(session, "Please enter the password of your account:");
+            
+            session.conversationData["password"] = result.response;
+            next();                        
+                    },
+                    function (session, result, next) {
+                        
+                        session.conversationData["password"] = result.response;
+                        var phoneEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'Phone');
+                        
+                                    // Checks if the food entity was found
+                        if (phoneEntity) {
+                            session.send('Deleting \'%s\'...', phoneEntity.entity);
+                            details.deletePhone(session,session.conversationData['username'],session.conversationData["password"],phoneEntity.entity); //<--- CALLL WE WANT
+                        } else {
+                            session.send("No food identified!!!");
+                            }
+                        
+                        next();
+                    },
+                   function (session) {
+                                   
+                    builder.Prompts.choice(session, "Following is the is the response:\n\n Would you like to reask it or go back", "Show me my address|Personal Information", { listStyle: builder.ListStyle.button });
+                    session.endDialog();
+                    
+        }
 
-    }]).triggerAction({
+    ]).triggerAction({
         matches: 'DeletePhone'
-    });
+    }); 
+
+   
 
 
 
@@ -561,7 +544,9 @@ bot.dialog('WelcomeIntent', function (session) {
                    .images([builder.CardImage.create(session, 'http://3mkm08kox71vtynw1b1wbtpab.wpengine.netdna-cdn.com/wp-content/uploads/2017/02/GettyImages-117455512.jpg')])
                    .buttons([
                        builder.CardAction.imBack(session, "Delete details", "Delete details"),
-                       builder.CardAction.imBack(session, "Add details", "Add details"),                             
+                       builder.CardAction.imBack(session, "Add details", "Add details"),          
+                       builder.CardAction.imBack(session, "I would like to see my personal information", "Back"),
+                       
                    ]),
            ]);
            session.send(msg).endDialog();
@@ -579,8 +564,8 @@ bot.dialog('WelcomeIntent', function (session) {
                    .images([builder.CardImage.create(session, 'http://3mkm08kox71vtynw1b1wbtpab.wpengine.netdna-cdn.com/wp-content/uploads/2017/02/GettyImages-117455512.jpg')])
                    .buttons([
                        builder.CardAction.imBack(session, "Delete my addresss", "Delete my addresss"),                
-                       builder.CardAction.imBack(session, "Delete my emails", "Delete my emails"),                
                        builder.CardAction.imBack(session, "Delete my phone numbers", "Delete my phone numbers"),                
+                       builder.CardAction.imBack(session, "I would like to see my personal information", "Back"),
                        
                    ]),
            ]);
@@ -655,31 +640,33 @@ bot.dialog('WelcomeIntent', function (session) {
         var msg = new builder.Message(session);
         msg.attachmentLayout(builder.AttachmentLayout.carousel)
         msg.attachments([
-            new builder.HeroCard(session)
-                .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
-                .title("Deposit money")
-                .text("Deposit money into your bank account by tapping on this card ")
-                .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')]),
- 
-                new builder.HeroCard(session)
-                .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
-                .title("Withdraw money")
-                .text("Withdraw money from your bank account by tapping on this card ")
-                .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')]),
-                
-                new builder.HeroCard(session)
-                .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
-                .title("Transfer money")
-                .text("Transfer money into others bank account by tapping on this card ")
-                .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')]),
-                
-                new builder.HeroCard(session)
-                .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
-                .title("Change password or username")
-                .text("Change your password or username of your bank account by tapping on this card ")
-                .images([builder.CardImage.create(session, 'http://petersapparel.parseapp.com/img/whiteshirt.png')]),
+                    new builder.HeroCard(session)
+                        .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
+                        .title("Deposit money")
+                        .text("Deposit money into your bank account by tapping on this card ")
+                        .images([builder.CardImage.create(session, 'https://momactivity.com/wp-content/uploads/2016/01/bigstock-Couple-enjoying-online-shoppin-101247752.jpg')]),
+        
+                        new builder.HeroCard(session)
+                        .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
+                        .title("Withdraw money")
+                        .text("Withdraw money from your bank account by tapping on this card ")
+                        .images([builder.CardImage.create(session, 'https://cdn.gobankingrates.com/wp-content/uploads/citizens-bank-baby-boomers.jpg')]),
+                        
+                        new builder.HeroCard(session)
+                        .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
+                        .title("Transfer money")
+                        .text("Transfer money into others bank account by tapping on this card ")
+                        .images([builder.CardImage.create(session, 'http://www.ofzimba.co.zw/wp-content/uploads/2015/07/happy-lady-with-Zimbabwe-prepaid-card.jpg')]),
+                        
+                        new builder.HeroCard(session)
+                        .tap(new builder.CardAction.openUrl(session,'https://github.com/NZMSA/2017-AdvTraining'))
+                        .title("Change password or username or email")
+                        .text("Change your password or username of your bank account by tapping on this card ")
+                        .images([builder.CardImage.create(session, 'https://t4.ftcdn.net/jpg/01/80/49/23/240_F_180492372_KbxApISMzPFbklU6E49lwCZuwe8WSNMd.jpg')]),
         ]);
+        builder.Prompts.choice(session, "Return:", "Bank Information", { listStyle: builder.ListStyle.button });
         session.send(msg).endDialog();
+        
     }).triggerAction({ matches: 'Transactions'});
 
 
@@ -812,40 +799,57 @@ bot.dialog('WelcomeIntent', function (session) {
         matches: 'AddEmail'
     });  
 
-    
-   
-    
     bot.dialog('AddPhone', [
         function (session, args, next) {
             session.dialogData.args = args || {};        
-            if (!session.conversationData["username"]) {
-                builder.Prompts.text(session, "Enter a username to setup your account.");                
-            } else {
+                builder.Prompts.text(session, "Please enter the username of your account:");
+                
                 next(); // Skip if we already have this info.
-            }
+        
         },
         function (session, results, next) {
-        
-
-                if (results.response) {
                     session.conversationData["username"] = results.response;
-                }
-                // Pulls out the food entity from the session if it exists
-                var foodEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'food');
-    
-                // Checks if the food entity was found
-                if (foodEntity) {
-                    session.send('Thanks for telling me that \'%s\' is your favourite food', foodEntity.entity);
-                    food.sendFavouriteFood(session, session.conversationData["username"], foodEntity.entity); // <-- LINE WE WANT
-    
-                } else {
-                    session.send("No food identified!!!");
-                }
-            }
-        
+            
+                
+                next()
+                // <---- THIS LINE HERE IS WHAT WE NEED 
+            
+        },
+        function (session, result, next) {
+            builder.Prompts.text(session, "Please enter the password of your account:");
+            
+            session.conversationData["password"] = result.response;
+            next();                        
+                    },
+                    function (session, result, next) {
+                        
+                        session.conversationData["password"] = result.response;
+                        var phoneEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'Phone');
+                        
+                                    // Checks if the food entity was found
+                        if (phoneEntity) {
+                            session.send('Thanks for telling me that \'%s\' is your favourite food', phoneEntity.entity);
+                            food.sendPhone(session, session.conversationData["username"], session.conversationData["password"], phoneEntity.entity); // <-- LINE WE WANT
+                        } else {
+                            session.send("No food identified!!!");
+                            }
+                        
+                        next();
+                    },
+                   function (session) {
+                                   
+                    builder.Prompts.choice(session, "Following is the is the response:\n\n Would you like to reask it or go back", "Show me my address|Personal Information", { listStyle: builder.ListStyle.button });
+                    session.endDialog();
+                    
+        }
+
     ]).triggerAction({
         matches: 'AddPhone'
-    });
+    });  
+ 
+   
+    
+
 
     bot.dialog('QnA', [
 

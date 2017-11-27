@@ -52,7 +52,30 @@ exports.showAllDetails = function getData(url, session, username, password, call
 };
 
 
-
+exports.postAddress = function SendData(url, username, password, Address){
+    var options = {
+        url: url,
+        method: 'POST',
+        headers: {
+            'ZUMO-API-VERSION': '2.0.0',
+            'Content-Type':'application/json'
+        },
+        json: {
+            "username" : username,
+            "password" : password,
+            "Address" : Address
+        }
+      };
+      
+      request(options, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            console.log(body);
+        }
+        else{
+            console.log(error);
+        }
+      });
+};
 
 exports.postEmail = function getData(url, username,password,Email){
     var options = {
@@ -79,6 +102,30 @@ exports.postEmail = function getData(url, username,password,Email){
       });
 };
 
+exports.postPhone = function getData(url, username,password,Phone){
+    var options = {
+        url: url,
+        method: 'POST',
+        headers: {
+            'ZUMO-API-VERSION': '2.0.0',
+            'Content-Type':'application/json'
+        },
+        json: {
+            "username" : username,
+            "password" : password,
+            "Phone" : Phone
+        }
+      };
+      
+      request(options, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            console.log(body);
+        }
+        else{
+            console.log(error);
+        }
+      });
+};
 
 exports.getYelpData = function getData(url,bearer,session, callback){
     
@@ -137,6 +184,48 @@ exports.getYelpData = function getData(url,bearer,session, callback){
                 if( !err && res.statusCode === 200){
                     console.log(body);
                     callback(body,session,username,password, Address);
+                }else {
+                    console.log(err);
+                    console.log(res);
+                }
+            })
+        
+        };
+
+        exports.deleteEmail = function deleteData(url,session, username, password ,Email, id, callback){
+            var options = {
+                url: url + "\\" + id,
+                method: 'DELETE',
+                headers: {
+                    'ZUMO-API-VERSION': '2.0.0',
+                    'Content-Type':'application/json'
+                }
+            };
+            request(options,function (err, res, body){
+                if( !err && res.statusCode === 200){
+                    console.log(body);
+                    callback(body,session,username,password, Email);
+                }else {
+                    console.log(err);
+                    console.log(res);
+                }
+            })
+        
+        };
+
+        exports.deletePhone = function deleteData(url,session, username, password ,Phone, id, callback){
+            var options = {
+                url: url + "\\" + id,
+                method: 'DELETE',
+                headers: {
+                    'ZUMO-API-VERSION': '2.0.0',
+                    'Content-Type':'application/json'
+                }
+            };
+            request(options,function (err, res, body){
+                if( !err && res.statusCode === 200){
+                    console.log(body);
+                    callback(body,session,username,password, Phone);
                 }else {
                     console.log(err);
                     console.log(res);
