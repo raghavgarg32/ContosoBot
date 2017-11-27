@@ -326,39 +326,54 @@ exports.startDialog = function (bot) {
         matches: 'DeleteFavourite'
     });
 
+
     bot.dialog('DeleteAddress', [
         function (session, args, next) {
-            session.dialogData.args = args || {};
-            if (!session.conversationData["username"]) {
-                builder.Prompts.text(session, "Enter a username to setup your account.");
-            } else {
+            session.dialogData.args = args || {};        
+                builder.Prompts.text(session, "Please enter the username of your account:");
+                
                 next(); // Skip if we already have this info.
-            }
-        },
-        function (session, results,next) {
-            
-            //Add this code in otherwise your username will not work.
-            if (results.response) {
-                session.conversationData["username"] = results.response;
-            }
-
-            session.send("You want to delete one of your favourite foods.");
-
-            // Pulls out the food entity from the session if it exists
-            var foodEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'food');
-
-            // Checks if the for entity was found
-            if (foodEntity) {
-                session.send('Deleting \'%s\'...', foodEntity.entity);
-                food.deleteFavouriteFood(session,session.conversationData['username'],foodEntity.entity); //<--- CALLL WE WANT
-            } else {
-                session.send("No food identified! Please try again");
-            }
         
+        },
+        function (session, results, next) {
+                    session.conversationData["username"] = results.response;
+            
+                
+                next()
+                // <---- THIS LINE HERE IS WHAT WE NEED 
+            
+        },
+        function (session, result, next) {
+            builder.Prompts.text(session, "Please enter the password of your account:");
+            
+            session.conversationData["password"] = result.response;
+            next();                        
+                    },
+                    function (session, result, next) {
+                        
+                        session.conversationData["password"] = result.response;
+                        var addressEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'address');
+                        
+                                    // Checks if the food entity was found
+                        if (addressEntity) {
+                            session.send('Deleting \'%s\'...', addressEntity.entity);
+                            details.deleteAddress(session,session.conversationData['username'],session.conversationData["password"],addressEntity.entity); //<--- CALLL WE WANT
+                        } else {
+                            session.send("No food identified!!!");
+                            }
+                        
+                        next();
+                    },
+                   function (session) {
+                                   
+                    builder.Prompts.choice(session, "Following is the is the response:\n\n Would you like to reask it or go back", "Show me my address|Personal Information", { listStyle: builder.ListStyle.button });
+                    session.endDialog();
+                    
+        }
 
-    }]).triggerAction({
+    ]).triggerAction({
         matches: 'DeleteAddress'
-    });
+    });  
     bot.dialog('DeleteEmail', [
         function (session, args, next) {
             session.dialogData.args = args || {};

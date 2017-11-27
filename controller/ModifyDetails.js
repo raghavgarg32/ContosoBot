@@ -1,14 +1,6 @@
 var rest = require('../API/Restclient');
 var password = require('./LuisDialog');
-exports.displayFavouriteFood = function getFavouriteFood(session, username, password){
-    var url = 'https://foodbot32.azurewebsites.net/tables/foodbot';
-    rest.getFavouriteFood(url, session, username, password, handleFavouriteFoodResponse)
-};
 
-exports.displayFavouriteFood = function showAllDetails(session, username, password){
-    var url = 'https://foodbot32.azurewebsites.net/tables/foodbot';
-    rest.showAllDetails(url, session, username, password, handleFavouriteFoodResponse)
-};
 
 exports.displayAddress = function showAddress(session, username, password){
     var url = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
@@ -36,10 +28,7 @@ exports.displayAllDetails = function showAllDetails(session, username, password)
 };
 
 
-exports.sendFavouriteFood = function postFavouriteFood(session, username, favouriteFood){
-    var url = 'https://foodbot32.azurewebsites.net/tables/foodbot';
-    rest.postFavouriteFood(url, username, favouriteFood);
-};
+
 
 exports.sendAddress = function postAddress(session, username, password, Address){
     var url = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
@@ -47,19 +36,21 @@ exports.sendAddress = function postAddress(session, username, password, Address)
 };
 
 
-exports.deleteFavouriteFood = function deleteFavouriteFood(session,username,favouriteFood){
-    var url  = 'https://foodbot32.azurewebsites.net/tables/foodbot';
 
 
-    rest.getFavouriteFood(url,session, username,function(message,session,username){
-     var   allFoods = JSON.parse(message);
-
-        for(var i in allFoods) {
-
-            if (allFoods[i].favouriteFood === favouriteFood && allFoods[i].username === username) {
+exports.deleteAddress = function deleteAddress(session,username,password,Address){
+    var url  = 'http://contosobank32.azurewebsites.net/tables/contosobankbot';
 
 
-                rest.deleteFavouriteFood(url,session,username,favouriteFood, allFoods[i].id ,handleDeletedFoodResponse)
+    rest.showAddress(url,session, username, password,function(message,session,username,password){
+     var allAddress = JSON.parse(message);
+
+        for(var i in allAddress) {
+
+            if (allAddress[i].Address === Address && allAddress[i].username === username && allAddress[i].password === password) {
+
+
+                rest.deleteAddress(url,session,username,password,Address,allAddress[i].id ,handleDeletedAddressResponse)
 
             }
         }
@@ -70,7 +61,7 @@ exports.deleteFavouriteFood = function deleteFavouriteFood(session,username,favo
 
 };
 
-function handleDeletedFoodResponse(body,session,username, favouriteFood){
+function handleDeletedAddressResponse(body,session,username,password, Address){
 
         console.log('Done');
 
@@ -79,38 +70,7 @@ function handleDeletedFoodResponse(body,session,username, favouriteFood){
 
 var correctlogin = 0;
 
-function handleFavouriteFoodResponse(message, session, username,password) {
-    var favouriteFoodResponse = JSON.parse(message);
-    var allFoods = [];
-    for (var index in favouriteFoodResponse) {
-        var usernameReceived = favouriteFoodResponse[index].username;
-        var passwordReceived = favouriteFoodResponse[index].password;
-        
-        console.log(favouriteFoodResponse[index]);
-        var favouriteFood = favouriteFoodResponse[index].favouriteFood;
-        //Convert to lower case whilst doing comparison to ensure the user can type whatever they like
-        if (username.toLowerCase() === usernameReceived.toLowerCase()) {
-            //Add a comma after all favourite foods unless last one
-            if(favouriteFoodResponse.length - 1) {
-                allFoods.push(favouriteFood);
-            }
-            else {
-                allFoods.push(favouriteFood + ', ');
-            }
-                // Print all favourite foods for the user that is currently logged in
-        }        
-    }
-    if (allFoods.length == 0){
-        session.send("%s, this is incorrect", password);  
-        
-    }
-    else{
-        session.send("%s, your favourite foods are: %s", username, allFoods); 
-        correctlogin = 1;   
-    }
-            
-    
-}
+
 
 function handleAddressResponse(message, session, username,password) {
     var addressResponse = JSON.parse(message);

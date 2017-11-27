@@ -1,14 +1,6 @@
 var request = require('request');
 
-exports.getFavouriteFood = function getData(url, session, username, password, callback){
-    request.get(url, {'headers':{'ZUMO-API-VERSION': '2.0.0'}}, function(err,res,body){
-        if(err){
-            console.log(err);
-        }else {
-            callback(body, session, username, password);
-        }
-    });
-};
+
 
 exports.showAddress = function getData(url, session, username, password, callback){
     request.get(url, {'headers':{'ZUMO-API-VERSION': '2.0.0'}}, function(err,res,body){
@@ -145,6 +137,27 @@ exports.getYelpData = function getData(url,bearer,session, callback){
                 if( !err && res.statusCode === 200){
                     console.log(body);
                     callback(body,session,username, favouriteFood);
+                }else {
+                    console.log(err);
+                    console.log(res);
+                }
+            })
+        
+        };
+
+        exports.deleteAddress = function deleteData(url,session, username, password ,Address, id, callback){
+            var options = {
+                url: url + "\\" + id,
+                method: 'DELETE',
+                headers: {
+                    'ZUMO-API-VERSION': '2.0.0',
+                    'Content-Type':'application/json'
+                }
+            };
+            request(options,function (err, res, body){
+                if( !err && res.statusCode === 200){
+                    console.log(body);
+                    callback(body,session,username,password, Address);
                 }else {
                     console.log(err);
                     console.log(res);
