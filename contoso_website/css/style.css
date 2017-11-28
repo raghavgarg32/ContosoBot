@@ -1,0 +1,168 @@
+
+
+* {margin: 0; padding: 0;}
+
+a {text-decoration: none;}
+
+/* This class is added on scroll */
+.fixed {
+position: fixed; 
+top: 0; 
+height: 70px; 
+z-index: 1;
+}
+
+
+
+
+body {
+color: #fff;
+font-family: 'open-sans-bold'; 
+font-size: 18px;
+text-align: center;
+}
+
+
+/* Navigation Settings */
+nav {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background: #0079d6;
+}
+
+nav li {
+display: inline-block;
+padding: 25px 10px;
+}
+
+nav li a {
+color: #fff;
+font-family:'Microsoft JhengHei Light';
+text-transform:initial;
+
+}
+
+section {
+height: 100vh;
+}
+
+/* Screens Settings */
+#screen1 {	
+background: #fff;
+}
+
+#screen1 p {
+padding-top: 200px;
+
+}
+
+#screen2 {
+    background: #fff;
+    height: 110vh;
+}
+
+
+
+
+#screen3 {
+    background: #F8F8F8;
+    height: 100vh;
+    background: url(../images/3.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+@media only screen and (max-width: 520px) and (max-height: 520px) {
+
+    nav li {
+        padding: 24px 4px;
+    }
+
+        nav li a {
+            font-size: 14px;
+        }
+}
+
+
+
+
+.fadein { position:relative; width:100%; height:100%; }
+.fadein img { position:absolute; left:0; top:0; }
+
+img { height:100%; width:100%; }
+
+h1 {
+    text-align: center;
+    padding-top: 100px;
+    font-family: Microsoft JhengHei Light;
+    font-size: 100px;
+    color: #0079d6
+}
+
+
+.aboutmewritting {
+    float: left;
+    color: #000000;
+    font-family: Microsoft JhengHei Light;
+    font-size: 2.2vw;
+    padding-right: 100px;
+    text-align: left;
+    padding-left: 100px;
+    padding-top: 2%;
+}
+
+.aboutmewritting ul{
+    float: left;
+    color: #000000;
+    font-family: Microsoft JhengHei Light;
+    font-size: 150%;
+    padding-right: 10px;
+    padding-left: 100px;
+    padding-top: 2%;
+}
+
+
+
+
+#chat {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 500px;
+    height: 600px;
+}
+
+#chat-button {
+    width: 195px;
+    height: 75px;
+    position: absolute;
+    bottom: 57px;
+    right: 0px;
+}
+
+#chat-frame {
+    height: 600px;
+    width: 500px;
+}
+
+
+    #chat-frame img {
+        width: 70px;
+        height: 20px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+iframe {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.hide {
+    display: none;
+}
+

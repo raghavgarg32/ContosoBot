@@ -3,7 +3,7 @@ var builder = require('botbuilder');
 
 //Calls 'getNutritionData' in RestClient.js with 'getFoodNutrition' as callback to get ndbno of food
 exports.displayNutritionCards = function getNutritionData(foodName, session){
-    var url = "https://api.nal.usda.gov/ndb/search/?format=json&q="+foodName+"&sort=r&max=1&offset=0&api_key=xFHyJl2DlXj1SulEiGla0v2VT5fR7p3TcHS0DPuq";
+    var url = "https://api.nal.usda.gov/ndb/search/?format=json&q=pizza&sort=r&max=1&offset=0&api_key=xFHyJl2DlXj1SulEiGla0v2VT5fR7p3TcHS0DPuq";
 
     rest.getNutritionData(url, session,foodName, getFoodNutrition);
 }
@@ -21,7 +21,8 @@ function getFoodNutrition(message, foodName, session){
 function displayNutritionCards(message, foodName,session){
     //Parses JSON
     var foodNutrition = JSON.parse(message);
-
+    session.send("rates: %s", foodNutrition);                
+    
     //Adds first 5 nutrition information (i.e calories, energy) onto list
     var nutrition = foodNutrition.report.food.nutrients;
     var nutritionItems = [];
@@ -31,7 +32,7 @@ function displayNutritionCards(message, foodName,session){
         nutritionItem.value = nutrition[i].value + " " + nutrition[i].unit;
         nutritionItems.push(nutritionItem);
     }
-
+    session.send("rates: %s", nutritionItems);
     //Displays nutrition adaptive cards in chat box 
     session.send(new builder.Message(session).addAttachment({
         contentType: "application/vnd.microsoft.card.adaptive",

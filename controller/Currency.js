@@ -1,0 +1,94 @@
+var rest = require('../API/Restclient');
+var builder = require('botbuilder');
+
+exports.displayCurrency = function getCurrencyData(session,amount, currentcur, nextcur){
+    var url = "https://api.fixer.io/latest?base="+currentcur;
+    rest.getCurrencyData(url, session,amount, currentcur, nextcur, handleCurrencyResponse)
+};
+
+function handleCurrencyResponse(message, session, amount, currentcur, nextcur) {
+    var CurrencyResponse = JSON.parse(message);
+    var allCurrency = [];
+    session.send("nextcur %s",nextcur)
+
+    
+    // Print all favourite foods for the user that is currently logged in
+    if (nextcur === 'NZD' && currentcur !== 'NZD'){
+        session.send("rates: %s", (CurrencyResponse.rates.NZD * amount));
+        var attachment = [];        
+        var card = new builder.HeroCard(session)
+        .title("The Converted Amount Is: %s",(CurrencyResponse.rates.NZD * amount))  
+        .text("Original Amount: %s\n\nConversion Rate: %s", amount, CurrencyResponse.rates.NZD)
+        .images([builder.CardImage.create(session, 'http://image.nj.com/home/adv-media/width380/img/mortgages_and_loans/photo/2017/05/24/MORTGAGE1.jpg')])
+        
+        attachment.push(card);
+        var message = new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments(attachment);
+    session.send(message);        
+    }
+
+    else if (nextcur === 'GBP' && currentcur !== 'GBP'){
+        session.send("rates: %s", (CurrencyResponse.rates.GBP * amount));
+        var attachment = [];        
+        var card = new builder.HeroCard(session)
+        .title("The Converted Amount Is: %s",(CurrencyResponse.rates.GBP * amount))  
+        .text("Original Amount: %s\n\nConversion Rate: %s", amount, CurrencyResponse.rates.GBP)
+        .images([builder.CardImage.create(session, 'http://image.nj.com/home/adv-media/width380/img/mortgages_and_loans/photo/2017/05/24/MORTGAGE1.jpg')])
+        
+        attachment.push(card);
+        var message = new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments(attachment);
+    session.send(message);        
+    }
+
+    else if (nextcur === 'AUD' && currentcur !== 'AUD'){
+        session.send("rates: %s", (CurrencyResponse.rates.AUD * amount));
+        var attachment = [];        
+        var card = new builder.HeroCard(session)
+        .title("The Converted Amount Is: %s",(CurrencyResponse.rates.AUD * amount))  
+        .text("Original Amount: %s\n\nConversion Rate: %s", amount, CurrencyResponse.rates.AUD)
+        .images([builder.CardImage.create(session, 'http://image.nj.com/home/adv-media/width380/img/mortgages_and_loans/photo/2017/05/24/MORTGAGE1.jpg')])
+        
+        attachment.push(card);
+        var message = new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments(attachment);
+    session.send(message);        
+    }
+
+    else if (nextcur === 'CAD' && currentcur !== 'CAD'){
+        session.send("rates: %s", (CurrencyResponse.rates.CAD * amount));
+        var attachment = [];        
+        var card = new builder.HeroCard(session)
+        .title("The Converted Amount Is: %s",(CurrencyResponse.rates.CAD * amount))  
+        .text("Original Amount: %s\n\nConversion Rate: %s", amount, CurrencyResponse.rates.CAD)
+        .images([builder.CardImage.create(session, 'http://image.nj.com/home/adv-media/width380/img/mortgages_and_loans/photo/2017/05/24/MORTGAGE1.jpg')])
+        
+        attachment.push(card);
+        var message = new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments(attachment);
+    session.send(message);        
+    }
+
+    else if (nextcur === 'USD' && currentcur !== 'USD'){
+        session.send("rates: %s", (CurrencyResponse.rates.USD * amount));
+        var attachment = [];        
+        var card = new builder.HeroCard(session)
+        .title("The Converted Amount Is: %s",(CurrencyResponse.rates.USD * amount))  
+        .text("Original Amount: %s\n\nConversion Rate: %s", amount, CurrencyResponse.rates.USD)
+        .images([builder.CardImage.create(session, 'http://image.nj.com/home/adv-media/width380/img/mortgages_and_loans/photo/2017/05/24/MORTGAGE1.jpg')])
+        
+        attachment.push(card);
+        var message = new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments(attachment);
+    session.send(message);        
+    }
+    
+   
+
+
+}

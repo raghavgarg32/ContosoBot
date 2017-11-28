@@ -3,6 +3,7 @@ var food = require("./ModifyDetails");
 var details = require("./ModifyDetails");
 var restaurant = require('./RestaurantCard');
 var nutrition = require('./NutritionCard');
+var currency = require('./Currency');
 var qna = require('./QnAMaker');
 var correctlogin = require("./ModifyDetails");
 
@@ -12,8 +13,7 @@ var isAttachment = false;
 
 exports.startDialog = function (bot) {
     // Replace {YOUR_APP_ID_HERE} and {YOUR_KEY_HERE} with your LUIS app ID and your LUIS key, respectively.
-    var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/a60b1df0-f068-4d7d-8dd1-87b95d1bb02c?subscription-key=c2def163238d4646a900f56a275998bc&verbose=true&timezoneOffset=0&q=');
-    var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/57455a20-6e38-4154-ba15-991b714afd9a?subscription-key=92739006b7e04eada749df2c8ffed87b&verbose=true&timezoneOffset=0&q=	');
+    var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/dad2ace1-deef-4dc9-b9a5-27bb3448bb04?subscription-key=b41aa5a69ef74f248bf75f815a7aefd5&verbose=true&timezoneOffset=0&q=');
     
     bot.recognizer(recognizer);
 
@@ -347,7 +347,7 @@ exports.startDialog = function (bot) {
         matches: 'DeletePhone'
     }); 
 
-   
+     
 
 
 
@@ -371,25 +371,7 @@ exports.startDialog = function (bot) {
             });
 
  // Add dialog to return list of shirts available
-bot.dialog('WelcomeIntent', function (session) {
- 
-    
-    var msg = new builder.Message(session);
-    msg.attachmentLayout(builder.AttachmentLayout.carousel)
-    msg.attachments([
-        new builder.HeroCard(session)
-            .title("Welcome to Contoso Banking Bot!")
-            .text("I am here to help you with any banking needs. I hope that I can help you to achieve what you desire.", "Bank Information|Personal Details|Currency and Stock Exchange")
-            .images([builder.CardImage.create(session, 'http://cdn.marketplaceimages.windowsphone.com/v8/images/6e04c950-e28a-46fc-bc83-fe244d8a9de9?imageType=ws_icon_large')])
-            .buttons([
-                builder.CardAction.imBack(session, "I would like to modify or see my bank details", "Personal Details"),
-                builder.CardAction.imBack(session, "I would like information about the bank", "Bank Information"),                
-                builder.CardAction.imBack(session, "I would like information  on Currency and Stock Exchange", "Currency and Stock Exchange"),
-                
-            ]),
-    ]);
-    session.send(msg).endDialog();
-}).triggerAction({ matches: 'WelcomeIntent' });
+
 
     bot.dialog('BankInformation', function (session) {
         
@@ -709,4 +691,74 @@ bot.dialog('WelcomeIntent', function (session) {
     });
     
 
+  
+bot.dialog('GetCurrency', [
+    function (session, args, next) {
+        session.dialogData.args = args || {};        
+        builder.Prompts.text(session, "The amount you want to convert to:");       
+        
+            
+            next(); // Skip if we already have this info.
+    
+    },
+    function (session, result, next) {
+        session.conversationData["amount"] = result.response;
+            
+            next();
+            // <---- THIS LINE HERE IS WHAT WE NEED 
+        
+    },
+    function (session, result, next) {
+        
+        
+        builder.Prompts.text(session, "From which currency(e.g. AUD)?");
+        
+            
+            next();
+            // <---- THIS LINE HERE IS WHAT WE NEED 
+        
+    },
+    function (session, result, next) {
+        session.conversationData["currentcur"] = result.response;
+        
+        
+        builder.Prompts.text(session, "To which currency(e.g. AUD)?");
+        
+        
+        next();                        
+                },
+                function (session, result, next) {
+                    session.conversationData["nextcur"] = result.response;
+
+                    session.send("amount %s",session.conversationData["amount"])
+                    
+                    session.send("currentcur %s",session.conversationData["currentcur"])
+                    
+                    session.send("nextcur %s",session.conversationData["nextcur"])
+                    
+                    session.send("Retrieving your rates");
+                    currency.displayCurrency(session, session.conversationData["amount"],session.conversationData["currentcur"],session.conversationData["nextcur"]);  // <---- THIS LINE HERE IS WHAT WE NEED 
+               
+            
+                    next();
+                },
+               function (session) {
+                               
+                builder.Prompts.choice(session, "Following this card is the response to your request:\n\n Go back:", "Delete Details", { listStyle: builder.ListStyle.button });
+                session.endDialog();
+                
+    }
+
+]).triggerAction({
+    matches: 'GetCurrency'
+});  
+
 }
+
+
+
+
+
+   
+
+
