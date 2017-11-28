@@ -380,7 +380,7 @@ bot.dialog('WelcomeIntent', function (session) {
         new builder.HeroCard(session)
             .title("Welcome to Contoso Banking Bot!")
             .text("I am here to help you with any banking needs. I hope that I can help you to achieve what you desire.", "Bank Information|Personal Details|Currency and Stock Exchange")
-            .images([builder.CardImage.create(session, './1.png')])
+            .images([builder.CardImage.create(session, 'http://www.htmlcsscolor.com/preview/gallery/0079D6.png')])
             .buttons([
                 builder.CardAction.imBack(session, "I would like to modify or see my bank details", "Personal Details"),
                 builder.CardAction.imBack(session, "I would like information about the bank", "Bank Information"),                
