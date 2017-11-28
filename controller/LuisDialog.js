@@ -3,6 +3,7 @@ var food = require("./ModifyDetails");
 var details = require("./ModifyDetails");
 var restaurant = require('./RestaurantCard');
 var nutrition = require('./NutritionCard');
+var currency = require('./Currency');
 var qna = require('./QnAMaker');
 var correctlogin = require("./ModifyDetails");
 
@@ -35,7 +36,23 @@ exports.startDialog = function (bot) {
     }).triggerAction({
         matches: 'GetCalories'
     });
+    bot.dialog('GetCurrency', function (session, args) {
 
+            // Pulls out the food entity from the session if it exists
+            var currencyEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'Currency');
+
+            // Checks if the for entity was found
+            if (currencyEntity) {
+                session.send('Calculating calories in %s...', currencyEntity.entity);
+                currency.displayCurrency(currencyEntity.entity, session);
+
+            } else {
+                session.send("No food identified! Please try again");
+            }
+    
+    }).triggerAction({
+        matches: 'GetCurrency'
+    });
 
 
   
