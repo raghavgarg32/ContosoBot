@@ -255,17 +255,6 @@ exports.getYelpData = function getData(url,bearer,session, callback){
                 }
               });
           };
-
-          exports.getCurrencyData = function getData(url, session, currencyName, callback){
-            
-                request.get(url, function(err,res,body){
-                    if(err){
-                        console.log(err);
-                    }else {
-                        callback(body, currencyName, session);
-                    }
-                });
-            };
 /*exports.deleteFavouriteFood = function deleteData(url,session, username ,favouriteFood, id, callback){
     var options = {
         url: url + "\\" + id,
