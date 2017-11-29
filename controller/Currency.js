@@ -15,7 +15,6 @@ function handleCurrencyResponse(message, session, amount, currentcur, nextcur) {
     
     // Prints conversion to NZD in a card form
     if (nextcur === 'NZD' && currentcur !== 'NZD'){
-        session.send("rates: %s", (CurrencyResponse.rates.NZD * amount));
         var attachment = [];        
         var card = new builder.HeroCard(session)
         .title("The Converted Amount Is: %s",(CurrencyResponse.rates.NZD * amount))  
