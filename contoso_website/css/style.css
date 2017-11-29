@@ -131,7 +131,7 @@ h1 {
     right: 25px;
     bottom: 25px;
     width: 500px;
-    height: 600px;
+    height: 500px;
 }
 
 #chat-button {
@@ -143,7 +143,7 @@ h1 {
 }
 
 #chat-frame {
-    height: 600px;
+    height: 500px;
     width: 500px;
 }
 
