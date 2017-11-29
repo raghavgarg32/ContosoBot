@@ -102,7 +102,7 @@ h1 {
 }
 
 
-.aboutmewritting {
+.content {
     float: left;
     color: #000000;
     font-family: Microsoft JhengHei Light;
@@ -113,15 +113,15 @@ h1 {
     padding-top: 2%;
 }
 
-.aboutmewritting ul{
-    float: left;
-    color: #000000;
-    font-family: Microsoft JhengHei Light;
-    font-size: 150%;
-    padding-right: 10px;
-    padding-left: 100px;
-    padding-top: 2%;
-}
+    .content ul {
+        float: left;
+        color: #000000;
+        font-family: Microsoft JhengHei Light;
+        font-size: 150%;
+        padding-right: 10px;
+        padding-left: 100px;
+        padding-top: 2%;
+    }
 
 
 
