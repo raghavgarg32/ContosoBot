@@ -531,7 +531,7 @@ bot.dialog('WelcomeIntent', function (session) {//Provides a welcome screen for 
                .title("Welcome to Contoso Banking Bot!")
                //Summarizes what the user can do here and gives the options as well
                .text("I am here to help you with any banking needs. I hope that I can help you to achieve what you desire.", "Bank Information|Personal Details|Currency and Stock Exchange")
-               .images([builder.CardImage.create(session, 'http://www.htmlcsscolor.com/preview/gallery/0079D6.png')])
+               .images([builder.CardImage.create(session, 'http://www.osh.co.ug/files/images/banking_finance20140208213346.jpg')])
                .buttons([
                    builder.CardAction.imBack(session, "I would like to modify or see my bank details", "Personal Details"),
                    builder.CardAction.imBack(session, "I would like information about the bank", "Bank Information"),                
@@ -647,7 +647,7 @@ bot.dialog('WelcomeIntent', function (session) {//Provides a welcome screen for 
 
         function (session, args, next) {
             session.dialogData.args = args || {};
-            builder.Prompts.text(session, "What is your question?");//Asks the question
+            builder.Prompts.text(session, "What is your question?\n\n e.g. I don't remember my Customer ID, where can I find it?\n\nIs 4 digit passcode sign in secure?\n\nWhat is the minimum amount that a Term Deposit can be managed using Online Banking?\n\nWhen can I hide my accounts?\n\nHow do I change my password?\n\nAre there any fees and charges associated with Online Banking?\n\nWhat can I view in my transaction history?\n\nHow do I get my Online Banking password?)");//Asks the question
             
             
             
