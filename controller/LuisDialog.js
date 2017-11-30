@@ -11,7 +11,7 @@ var isAttachment = false;
 
 exports.startDialog = function (bot) {
     // Replace {YOUR_APP_ID_HERE} and {YOUR_KEY_HERE} with your LUIS app ID and your LUIS key, respectively.
-    var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/78b837f4-daa9-4cb6-907b-532550088fb9?subscription-key=b41aa5a69ef74f248bf75f815a7aefd5&verbose=true&timezoneOffset=0&q=');
+    var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/773e83d9-425f-4138-bea3-26ddbb6cac69?subscription-key=d815d5827cc84b4b8e9935674293bd02&verbose=true&timezoneOffset=0&q=');
     
     bot.recognizer(recognizer);
   
