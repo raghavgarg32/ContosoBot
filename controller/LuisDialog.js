@@ -30,8 +30,7 @@ exports.startDialog = function (bot) {
             
         },
         function (session, result, next) {
-            builder.Prompts.text(session, "This thing isnt working yo:");//For safety asks user for password
-            session.send("hello");             
+            builder.Prompts.text(session, "Please enter in your password:");//For safety asks user for password
 
             session.userData.password = result.response;//Stores password in password
 
@@ -40,20 +39,17 @@ exports.startDialog = function (bot) {
                     function (session, result, next) {
               
                         session.userData.password = result.response;
-
-                        session.send(session.userData.username)
-                        session.send(session.userData.password)
-
-
-                        details.displayAddress(session, session.userData.username, session.userData.password);  // displays address to user
+                        
+                        // details.displayAddress(session, session.userData.username, session.userData.password);  // displays address to user
                         
                         session.send("Retrieving your Addresss...please wait");//give user loading message
-                        
+                        session.send("1/23 Example Road, Example Suburb, Auckland")
                         next();
                     },
                    function (session) {
                     //Tells user what they could do next  
-                    builder.Prompts.choice(session, "Following is the is the response:\n\n Would you like to reask it or go back", "Show me my address|Personal Information", { listStyle: builder.ListStyle.button });
+
+                    builder.Prompts.choice(session, "Would you like to reask it or go back", "Show me my address|Personal Information", { listStyle: builder.ListStyle.button });
                     session.endDialog();
                     
         }
@@ -87,15 +83,15 @@ exports.startDialog = function (bot) {
                     function (session, result, next) {
               
                         session.userData.password = result.response;
-                        details.displayEmail(session, session.conversationData["username"], session.conversationData["password"]); // displays email to user
+                        // details.displayEmail(session, session.conversationData["username"], session.conversationData["password"]); // displays email to user
                         
                         session.send("Retrieving your Email(s)...please wait");//give user loading message
-                        
+                        session.send("example@gmail.com");
                         next();
                     },
                    function (session) {
                     //Tells user what they could do next 
-                    builder.Prompts.choice(session, "Following is the is the response:\n\n Would you like to reask it or go back", "Show me my emails|Personal Information", { listStyle: builder.ListStyle.button });
+                    builder.Prompts.choice(session, "Would you like to reask it or go back", "Show me my emails|Personal Information", { listStyle: builder.ListStyle.button });
                     session.endDialog();
                     
         }
@@ -129,15 +125,15 @@ exports.startDialog = function (bot) {
                     function (session, result, next) {
               
                         session.userData.password = result.response;
-                        details.displayPhone(session, session.conversationData["username"], session.conversationData["password"]);  //displays phone numbers to users
+                        // details.displayPhone(session, session.conversationData["username"], session.conversationData["password"]);  //displays phone numbers to users
                         
                         session.send("Retrieving your Phone number(s)... please wait");//give user loading message
-                        
+                        session.send("021234432");
                         next();
                     },
                    function (session) {
                     //Tells user what they could do next 
-                    builder.Prompts.choice(session, "Following is the is the response:\n\n Would you like to reask it or go back", "Show me my phone numbers|Personal Information", { listStyle: builder.ListStyle.button });
+                    builder.Prompts.choice(session, "Would you like to reask it or go back", "Show me my phone numbers|Personal Information", { listStyle: builder.ListStyle.button });
                     session.endDialog();
                     
         }
@@ -171,10 +167,10 @@ exports.startDialog = function (bot) {
                     function (session, result, next) {
               
                         session.userData.password = result.response;//Stores password in password
-                        details.displayBalance(session, session.conversationData["username"], session.conversationData["password"]);  //Displays the account balance to the user
+                        // details.displayBalance(session, session.conversationData["username"], session.conversationData["password"]);  //Displays the account balance to the user
                         
                         session.send("Retrieving your Account Balance... please wait");//Gives loading message to user
-                        
+                        session.send("$250,000,000,000")
                         next();
                     },
                    function (session) {
@@ -214,10 +210,10 @@ exports.startDialog = function (bot) {
                     function (session, result, next) {
               
                         session.userData.password = result.response;//Stores password in password
-                        details.displayAllDetails(session, session.conversationData["username"], session.conversationData["password"]);  // displays all details to user
+                        // details.displayAllDetails(session, session.conversationData["username"], session.conversationData["password"]);  // displays all details to user
                         
                         session.send("Retrieving your all of your details...please wait");//Gives loading message to user
-                        
+                        session.send("Address: 1/23 Example Road, Example Suburb, Auckland\nPhone: 021234432\nEmail: example@gmail.com\n$250,000,000,000");
                         next();
                     },
                    function (session) {
