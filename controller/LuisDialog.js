@@ -300,7 +300,7 @@ exports.startDialog = function (bot) {
             next();                        
                     },
                     function (session, result, next) {
-                        
+                        session.send("This data is stored")
                         session.conversationData["password"] = result.response;//Stores password in password
                         var phoneEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'Phone');//Finds phone number in users response
                         
