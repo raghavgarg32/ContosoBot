@@ -3,7 +3,7 @@ var builder = require('botbuilder');
 
 //Calls 'getCurrencyData' in RestClient.js with 'displayCurrency' as callback to get list of all currencies
 exports.displayCurrency = function getCurrencyData(session,amount, currentcur, nextcur){
-    var url = "https://api.fixer.io/latest?base="+currentcur;
+    var url = "http://data.fixer.io/api/latest?access_key=90eaf09c672c4fc061df4d92f05d73e8";
     rest.getCurrencyData(url, session,amount, currentcur, nextcur, handleCurrencyResponse)
 };
 

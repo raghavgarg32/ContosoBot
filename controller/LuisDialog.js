@@ -10,11 +10,10 @@ var isAttachment = false;
 
 
 exports.startDialog = function (bot) {
-    // Replace {YOUR_APP_ID_HERE} and {YOUR_KEY_HERE} with your LUIS app ID and your LUIS key, respectively.
     var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/5b5a0321-ac9b-4115-a730-85383d54dc84?subscription-key=b41aa5a69ef74f248bf75f815a7aefd5&verbose=true&timezoneOffset=0&q=');
     
     bot.recognizer(recognizer);
-  
+
     bot.dialog('ShowAddress', [ //This shows the user thier addresses
         function (session, args, next) {
             session.dialogData.args = args || {};        
@@ -24,8 +23,7 @@ exports.startDialog = function (bot) {
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username in username
-            
+                    session.userData.username = results.response;            
                 
                 next()
                 // <---- THIS LINE HERE IS WHAT WE NEED 
@@ -33,21 +31,28 @@ exports.startDialog = function (bot) {
         },
         function (session, result, next) {
             builder.Prompts.text(session, "This thing isnt working yo:");//For safety asks user for password
-            
-            session.conversationData["password"] = result.response;//Stores password in password
+            session.send("hello");             
+
+            session.userData.password = result.response;//Stores password in password
+
             next();                        
                     },
                     function (session, result, next) {
               
-                        session.conversationData["password"] = result.response;
-                        details.displayAddress(session, session.conversationData["username"], session.conversationData["password"]);  // displays address to user
+                        session.userData.password = result.response;
+
+                        session.send(session.userData.username)
+                        session.send(session.userData.password)
+
+
+                        details.displayAddress(session, session.userData.username, session.userData.password);  // displays address to user
                         
                         session.send("Retrieving your Addresss...please wait");//give user loading message
                         
                         next();
                     },
                    function (session) {
-                    //Tells user what they could do next               
+                    //Tells user what they could do next  
                     builder.Prompts.choice(session, "Following is the is the response:\n\n Would you like to reask it or go back", "Show me my address|Personal Information", { listStyle: builder.ListStyle.button });
                     session.endDialog();
                     
@@ -66,8 +71,8 @@ exports.startDialog = function (bot) {
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username in username
-            
+                    session.userData.username = results.response;
+
                 
                 next()
                 // <---- THIS LINE HERE IS WHAT WE NEED 
@@ -76,12 +81,12 @@ exports.startDialog = function (bot) {
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//For safety asks user for password
             
-            session.conversationData["password"] = result.response;//Stores password in password
+            session.userData.password = result.response;//Stores password in password
             next();                        
                     },
                     function (session, result, next) {
               
-                        session.conversationData["password"] = result.response;
+                        session.userData.password = result.response;
                         details.displayEmail(session, session.conversationData["username"], session.conversationData["password"]); // displays email to user
                         
                         session.send("Retrieving your Email(s)...please wait");//give user loading message
@@ -108,7 +113,7 @@ exports.startDialog = function (bot) {
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username in username
+                    session.userData.username = results.response; //Stores username in username
             
                 
                 next()
@@ -118,12 +123,12 @@ exports.startDialog = function (bot) {
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//For safety asks user for password
             
-            session.conversationData["password"] = result.response;//Stores password in password
+            session.userData.password = result.response;//Stores password in password
             next();                        
                     },
                     function (session, result, next) {
               
-                        session.conversationData["password"] = result.response;
+                        session.userData.password = result.response;
                         details.displayPhone(session, session.conversationData["username"], session.conversationData["password"]);  //displays phone numbers to users
                         
                         session.send("Retrieving your Phone number(s)... please wait");//give user loading message
@@ -150,7 +155,7 @@ exports.startDialog = function (bot) {
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username in username
+                    session.userData.username = results.response; //Stores username in username
             
                 
                 next()
@@ -160,12 +165,12 @@ exports.startDialog = function (bot) {
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//For safety asks user for password
             
-            session.conversationData["password"] = result.response;
+            session.userData.password = result.response;
             next();                        
                     },
                     function (session, result, next) {
               
-                        session.conversationData["password"] = result.response;//Stores password in password
+                        session.userData.password = result.response;//Stores password in password
                         details.displayBalance(session, session.conversationData["username"], session.conversationData["password"]);  //Displays the account balance to the user
                         
                         session.send("Retrieving your Account Balance... please wait");//Gives loading message to user
@@ -193,7 +198,7 @@ exports.startDialog = function (bot) {
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username in username
+                    session.userData.username = results.response; //Stores username in username
             
                 
                 next()
@@ -203,12 +208,12 @@ exports.startDialog = function (bot) {
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//For safety asks user for password
             
-            session.conversationData["password"] = result.response;
+            session.userData.password = result.response;
             next();                        
                     },
                     function (session, result, next) {
               
-                        session.conversationData["password"] = result.response;//Stores password in password
+                        session.userData.password = result.response;//Stores password in password
                         details.displayAllDetails(session, session.conversationData["username"], session.conversationData["password"]);  // displays all details to user
                         
                         session.send("Retrieving your all of your details...please wait");//Gives loading message to user
@@ -232,13 +237,14 @@ exports.startDialog = function (bot) {
     bot.dialog('DeleteAddress', [//Deletes address from users addresses
         function (session, args, next) {
             session.dialogData.args = args || {};        
-                builder.Prompts.text(session, "Please enter the username of your account:");//Asks username for safety
+            session.send("Delete Address is not currently allowed through this chatbot, \nPlease complete this operation through website.");
+            // builder.Prompts.text(session, "Please enter the username of your account:");//Asks username for safety
                 
-                next(); // Skip if we already have this info.
+                // next(); // Skip if we already have this info.
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username into username
+                    session.userData.username = results.response; //Stores username into username
             
                 
                 next()
@@ -248,12 +254,12 @@ exports.startDialog = function (bot) {
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//Asks password for safety
             
-            session.conversationData["password"] = result.response;
+            session.userData.password = result.response;
             next();                        
                     },
                     function (session, result, next) {
                         
-                        session.conversationData["password"] = result.response;//Stores password into password
+                        session.userData.password = result.response;//Stores password into password
                         var addressEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'address');
                         
                         if (addressEntity) {//If address is found then it is deleted other wise its not
@@ -280,13 +286,15 @@ exports.startDialog = function (bot) {
     bot.dialog('DeletePhone', [//Deletes phone numbers from users phone numbers
         function (session, args, next) {
             session.dialogData.args = args || {};        
-                builder.Prompts.text(session, "Please enter the username of your account:");//Asks username for safety
+            session.send("Delete Phone number is not currently allowed through this chatbot, \nPlease complete this operation through website.");
+
+                // builder.Prompts.text(session, "Please enter the username of your account:");//Asks username for safety
                 
-                next(); // Skip if we already have this info.
+                // next(); // Skip if we already have this info.
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username into username
+                    session.userData.username = results.response; //Stores username into username
             
                 
                 next()
@@ -296,12 +304,12 @@ exports.startDialog = function (bot) {
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//Asks password for safety
             
-            session.conversationData["password"] = result.response;
+            session.userData.password = result.response;
             next();                        
                     },
                     function (session, result, next) {
                         session.send("This data is stored")
-                        session.conversationData["password"] = result.response;//Stores password in password
+                        session.userData.password = result.response;//Stores password in password
                         var phoneEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'Phone');//Finds phone number in users response
                         
                         if (phoneEntity) {//If phone number is found then it is deleted other wise its not
@@ -451,7 +459,7 @@ exports.startDialog = function (bot) {
                //Provide heading, the times and an option to go back
                .title("Office Hours")
                .text("*We are closed on all public hoidays. Sorry for any inconvenience")
-                   .images([builder.CardImage.create(session, 'http://www.drmac.co.nz/wp-content/uploads/2012/06/Office-Hours-2017.png')])
+                   .images([builder.CardImage.create(session, 'http://assets.ecenglish.com/blogs/uploads/sites/23/2014/05/double-banking1.jpg')])
                    .buttons([
                        builder.CardAction.imBack(session, "Bank Information", "Back/ Bank Information"),
 
@@ -554,7 +562,7 @@ bot.dialog('WelcomeIntent', function (session) {//Provides a welcome screen for 
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username in username
+                    session.userData.username = results.response; //Stores username in username
             
                 
                 next()
@@ -564,17 +572,22 @@ bot.dialog('WelcomeIntent', function (session) {//Provides a welcome screen for 
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//Asks user for password for safety
             
-            session.conversationData["password"] = result.response;
+            session.userData.password = result.response;
             next();                        
                     },
                     function (session, result, next) {
                         
-                        session.conversationData["password"] = result.response;//Stores password in to pasword
+                        session.userData.password = result.response;//Stores password in to pasword
+                        
+                        session.send(session.userData.username);
+                        
+                        session.send(session.userData.password);
+
                         var addressEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'address');//finds the address in users response
                         
                         if (addressEntity) {//If the address is found, the address is added otherwise not
                             session.send('I have added \'%s\' to your account addresses', addressEntity.entity);
-                            details.sendAddress(session, session.conversationData["username"], session.conversationData["password"], addressEntity.entity); // <-- LINE WE WANT
+                            details.sendAddress(session, session.userData.username, session.userData.password, addressEntity.entity); // <-- LINE WE WANT
                         } else {
                             session.send("I am sorry I could not understand your request... please try again");
                             }
@@ -601,7 +614,7 @@ bot.dialog('WelcomeIntent', function (session) {//Provides a welcome screen for 
         
         },
         function (session, results, next) {
-                    session.conversationData["username"] = results.response;//Stores username into username
+                    session.userData.username = results.response; //Stores username into username
             
                 
                 next()
@@ -611,12 +624,12 @@ bot.dialog('WelcomeIntent', function (session) {//Provides a welcome screen for 
         function (session, result, next) {
             builder.Prompts.text(session, "Please enter the password of your account:");//Asks user for password for safety
             
-            session.conversationData["password"] = result.response;//Stores password in password
+            session.userData.password = result.response;//Stores password in password
             next();                        
                     },
                     function (session, result, next) {
                         
-                        session.conversationData["password"] = result.response;
+                        session.userData.password = result.response;
                         var phoneEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'Phone');//Finds phone number in users response
                         
                         if (phoneEntity) {//If the phonenumber is found, the phone number is added otherwise not
@@ -647,7 +660,7 @@ bot.dialog('WelcomeIntent', function (session) {//Provides a welcome screen for 
 
         function (session, args, next) {
             session.dialogData.args = args || {};
-            builder.Prompts.text(session, "What is your question?\n\n e.g. I don't remember my Customer ID, where can I find it?\n\nIs 4 digit passcode sign in secure?\n\nWhat is the minimum amount that a Term Deposit can be managed using Online Banking?\n\nWhen can I hide my accounts?\n\nHow do I change my password?\n\nAre there any fees and charges associated with Online Banking?\n\nWhat can I view in my transaction history?\n\nHow do I get my Online Banking password?)");//Asks the question
+        builder.Prompts.text(session, "What is your question?\n\n e.g. I don't remember my Customer ID, where can I find it?\n\nIs 4 digit passcode sign in secure?\n\nWhat is the minimum amount that a Term Deposit can be managed using Online Banking?\n\nWhen can I hide my accounts?\n\nHow do I change my password?\n\nAre there any fees and charges associated with Online Banking?\n\nWhat can I view in my transaction history?\n\nHow do I get my Online Banking password?)");//Asks the question
             
             
             
