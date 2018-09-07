@@ -137,6 +137,7 @@ function handleDeletedPhoneResponse(body,session,username,password, Phone){
 }
 
 function handleAddressResponse(message, session, username,password) {//This determine how the address will be displayed
+    session.send("This address is not being picked up")
     var addressResponse = JSON.parse(message);
     var allAddress = [];
     for (var index in addressResponse) {
