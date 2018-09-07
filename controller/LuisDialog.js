@@ -213,7 +213,7 @@ exports.startDialog = function (bot) {
                         // details.displayAllDetails(session, session.conversationData["username"], session.conversationData["password"]);  // displays all details to user
                         
                         session.send("Retrieving your all of your details...please wait");//Gives loading message to user
-                        session.send("Address: 1/23 Example Road, Example Suburb, Auckland\nPhone: 021234432\nEmail: example@gmail.com\n$250,000,000,000");
+                        session.send("Address: 1/23 Example Road, Example Suburb, Auckland\nPhone: 021234432\nEmail: example@gmail.com\nBalance: $250,000,000,000");
                         next();
                     },
                    function (session) {
