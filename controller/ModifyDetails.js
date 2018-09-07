@@ -3,7 +3,7 @@ var password = require('./LuisDialog');
 
 
 exports.displayAddress = function showAddress(session, username, password){//Shows the user the address
-    var url = 'https://contosobot32.azurewebsites.net/tables/contosobottable';
+    var url = 'https://foodbotmsa.azurewebsites.net/tables/FoodBot';
     rest.showAddress(url, session, username, password, handleAddressResponse)
 };
 
@@ -137,37 +137,26 @@ function handleDeletedPhoneResponse(body,session,username,password, Phone){
 }
 
 function handleAddressResponse(message, session, username,password) {//This determine how the address will be displayed
-    session.send("This address is not being picked up")
-    var addressResponse = JSON.parse(message);
-    var allAddress = [];
-    for (var index in addressResponse) {
-        var usernameReceived = addressResponse[index].username;
-        var passwordReceived = addressResponse[index].password;
-        
-        console.log(addressResponse[index]);
-        var Address = addressResponse[index].Address;
+    var favouriteFoodResponse = JSON.parse(message);
+    var allFoods = [];
+    for (var index in favouriteFoodResponse) {
+        var usernameReceived = favouriteFoodResponse[index].username;
+        var favouriteFood = favouriteFoodResponse[index].favouriteFood;
+
         //Convert to lower case whilst doing comparison to ensure the user can type whatever they like
-        if (username.toLowerCase() === usernameReceived.toLowerCase() && password === passwordReceived) {
-            //Add a comma after all address unless last one
-            if(addressResponse.length - 1) {
-                allAddress.push(Address);
+        if (username.toLowerCase() === usernameReceived.toLowerCase()) {
+            //Add a comma after all favourite foods unless last one
+            if(favouriteFoodResponse.length - 1) {
+                allFoods.push(favouriteFood);
             }
             else {
-                allAddress.push(Address + ', ');
+                allFoods.push(favouriteFood + ', ');
             }
-                // Print all addresses for the user that is currently logged in
         }        
     }
-
-    //checks if the username or the password is correct
-    if (allAddress.length == 0){
-        session.send("Either your username is incorrect or your password is incorrect... Please try again");  
-        
-    }
-    else{
-        session.send("%s, your address(s) are: %s", username, allAddress); 
-        correctlogin = 1;   
-    }
+    
+    // Print all favourite foods for the user that is currently logged in
+    session.send("%s, your favourite foods are: %s", username, allFoods);   
             
     
 }
