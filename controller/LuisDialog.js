@@ -32,7 +32,7 @@ exports.startDialog = function (bot) {
             
         },
         function (session, result, next) {
-            builder.Prompts.text(session, "Please enter the password of your account:");//For safety asks user for password
+            builder.Prompts.text(session, "This thing isnt working yo:");//For safety asks user for password
             
             session.conversationData["password"] = result.response;//Stores password in password
             next();                        
